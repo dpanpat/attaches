@@ -309,6 +309,7 @@ export default class AttachesTool {
     } else {
       this.uploadingFailed(this.config.errorMessage);
     }
+    this.dispatchOnChange();
   }
 
   /**
@@ -465,5 +466,14 @@ export default class AttachesTool {
     }
 
     return el;
+  }
+
+  /**
+   * Triggers the onChange handler by getting the current block and calling dispatchChange from BlockAPI
+   */
+  dispatchOnChange() {
+    if (this.api.blocks.getBlocksCount() > 0) {
+      this.api.blocks.getBlockByIndex(0).dispatchChange();
+    }
   }
 }
