@@ -308,7 +308,6 @@ export default class AttachesTool {
         }
       }
 
-      console.log(this.data);
       this.nodes.button.remove();
       this.showFileData();
       this.moveCaretToEnd(this.nodes.title);
