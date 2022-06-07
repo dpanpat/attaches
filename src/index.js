@@ -300,7 +300,15 @@ export default class AttachesTool {
         },
         title: title || name,
       };
+      const keys = Object.keys(body.file);
 
+      for (let i = 0; i < Object.keys(body.file).length; i++) {
+        if (!(['url', 'name', 'size', 'title'].includes(keys[i]))){
+          this.data[keys[i]] = body.file[keys[i]];
+        }
+      }
+
+      console.log(this.data);
       this.nodes.button.remove();
       this.showFileData();
       this.moveCaretToEnd(this.nodes.title);
