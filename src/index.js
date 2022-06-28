@@ -13,6 +13,8 @@ const LOADER_TIMEOUT = 500;
  * @description Attaches Tool's output data format
  * @property {AttachesFileData} file - object containing information about the file
  * @property {string} title - file's title
+ * @property {string} [attachmentId] - Attachment ID
+ * @property {string} [attachmentName] - Attachment name
  */
 
 /**
@@ -79,6 +81,8 @@ export default class AttachesTool {
     this._data = {
       file: {},
       title: '',
+      attachmentId: '',
+      attachmentName: '',
     };
 
     this.config = {
@@ -90,9 +94,7 @@ export default class AttachesTool {
       uploader: config.uploader || undefined,
       additionalRequestHeaders: config.additionalRequestHeaders || {},
     };
-
     this.data = data;
-
     /**
      * Module for files uploading
      */
@@ -289,7 +291,7 @@ export default class AttachesTool {
     const body = response;
 
     if (body.success && body.file) {
-      const { url, name, size, title } = body.file;
+      const { url, name, size, title, attachmentId, attachmentName } = body.file;
 
       this.data = {
         file: {
@@ -298,15 +300,10 @@ export default class AttachesTool {
           name,
           size,
         },
+        attachmentId,
+        attachmentName,
         title: title || name,
       };
-      const keys = Object.keys(body.file);
-
-      for (let i = 0; i < Object.keys(body.file).length; i++) {
-        if (!(['url', 'name', 'size', 'title'].includes(keys[i]))){
-          this.data[keys[i]] = body.file[keys[i]];
-        }
-      }
 
       this.nodes.button.remove();
       this.showFileData();
@@ -424,7 +421,7 @@ export default class AttachesTool {
    *
    * @param {AttachesToolData} data
    */
-  set data({ file, title }) {
+  set data({ file, title, attachmentId, attachmentName }) {
     this._data = Object.assign({}, {
       file: {
         url: (file && file.url) || this._data.file.url,
@@ -433,6 +430,8 @@ export default class AttachesTool {
         size: (file && file.size) || this._data.file.size,
       },
       title: title || this._data.title,
+      attachmentId: attachmentId || this._data.attachmentId,
+      attachmentName: attachmentName || this._data.attachmentName,
     });
   }
 
